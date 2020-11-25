@@ -30,6 +30,13 @@ function addItem(e){
     // console.log(todo)
 };
 
+function fetchLists() {
+    fetch("http://localhost:3000/lists")
+    .then(resp => resp.json())
+    .then(json => renderItem(json[0].name))
+}
+
+
 
 function renderItem(item){
     let li = document.createElement('li'); 
@@ -44,7 +51,7 @@ function renderItem(item){
         li.innerHTML = item;
         list1.appendChild(li);
 
-        console.log(li)
+        // console.log(li)
 };
 
 function addLike(e){
@@ -54,3 +61,5 @@ function addLike(e){
 
     like.innerText = `${count} Likes`;
 }
+
+fetchLists()
