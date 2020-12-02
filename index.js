@@ -6,7 +6,7 @@ const todo = ['learn', 'laundry', 'shopping'];
 function addToDo(todo){
   
     for (let i = 0; i < todo.length; i++) {
-       renderItem(todo[i])
+       renderList(todo[i])
     }
 }
 
@@ -22,23 +22,24 @@ form.addEventListener('submit', addItem)
 function addItem(e){
     e.preventDefault()
     let text = e.target.children[0].value
-    renderItem(text)
+    renderList(text)
     // console.log('clicked')
     e.target.reset()
     // console.log(text.value)
     // todo.push(text.value)
     // console.log(todo)
+    saveListToDatabase(text)
 };
 
 function fetchLists() {
     fetch("http://localhost:3000/lists")
     .then(resp => resp.json())
-    .then(json => renderItem(json[0].name))
+    .then(json => json.forEach(list => renderList(list.name)))
 }
 
 
 
-function renderItem(item){
+function renderList(item){
     let li = document.createElement('li'); 
     let button = document.createElement('button');
     let pTag = document.createElement('p')
@@ -61,5 +62,24 @@ function addLike(e){
 
     like.innerText = `${count} Likes`;
 }
+
+function saveListToDatabase(text){
+    console.log(text)
+        let configObj = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                name: text
+            })
+        };
+
+    fetch("http://localhost:3000/lists",configObj)
+}
+
+
+
 
 fetchLists()
